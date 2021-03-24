@@ -1,7 +1,7 @@
 let canvas, ctx;
 const squareSize = 32;
 const squareNumberX = 21; // Needs to be odd
-const squareNumberY = 21; // Needs to be odd
+const squareNumberY = 15; // Needs to be odd
 const canvasWidth = squareSize * squareNumberX;
 const canvasHeight = squareSize * squareNumberY;
 const centerX = squareNumberX % 2 === 1 ? (canvasWidth - squareSize) / 2 : canvasWidth / 2;
@@ -21,7 +21,8 @@ class Game {
     else sprite.x = x;
     if(typeof y === "undefined") sprite.y = 0;
     else sprite.y = y;
-    ctx.drawImage(sprite.img, sprite.left, sprite.top, sprite.width, sprite.height, sprite.x, sprite.y, squareSize, squareSize);
+    ctx.drawImage(sprite.img, sprite.left, sprite.top, sprite.width, sprite.height,
+                  sprite.x, sprite.y, squareSize, squareSize);
   }
 }
 
