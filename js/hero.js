@@ -48,8 +48,8 @@ class Hero {
     if (this.move === 0) {
       if (this.moved) {
         // make battle class & method
-        if (Math.random() < battleRate) { // If combat begins
-          window.gameState = stateList.combat; // Change state to combat mode
+        if (Math.random() < battleRate) { // If battle begins
+          window.gameState = stateList.battle; // Change state to battle mode
           alert('Enemy appeared!');
           input.up = false;
           input.down = false;
