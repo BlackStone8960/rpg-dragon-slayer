@@ -21,7 +21,7 @@ class Game {
     else sprite.x = x;
     if(typeof y === "undefined") sprite.y = 0;
     else sprite.y = y;
-    ctx.drawImage(sprite.img, sprite.left, sprite.top, sprite.width, sprite.height,
+    ctx.drawImage(sprite.img, sprite.left, sprite.top, sprite.width, sprite.height, 
                   sprite.x, sprite.y, squareSize, squareSize);
   }
 }

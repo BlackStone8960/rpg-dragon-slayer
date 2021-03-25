@@ -46,10 +46,10 @@ class Input {
           this.right = false;
           break;
         case "Enter" :
-          this.enter = true;
+          this.enter = false;
           break;
         case "Space" :
-          this.space = true;
+          this.space = false;
           break;
       }
     })

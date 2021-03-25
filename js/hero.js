@@ -1,8 +1,8 @@
 import Sprite from './sprite.js';
-import { map, passableSquare } from './map.js';
+import { map, passableTile, stateList } from './main.js';
 import { squareSize, centerX, centerY, squareNumberX, squareNumberY } from "./game.js";
 
-const battleRate = 0.10;
+const battleRate = 0.06;
 
 class Hero {
   constructor () {
@@ -21,8 +21,11 @@ class Hero {
     this.direction = "down";
     this.foot = true;
     this.moved = false; // whether if just after moved
+    this.hp = 32;
+    this.mp = 4;
     this.attack = 4;
     this.defence = 6;
+    this.evadeRate = 0.1;
   }
   moveHero() {
     const input = window.gameInput;
@@ -45,8 +48,17 @@ class Hero {
     if (this.move === 0) {
       if (this.moved) {
         // make battle class & method
-        if (Math.random() < battleRate) {
+        if (Math.random() < battleRate) { // If combat begins
+          window.gameState = stateList.combat; // Change state to combat mode
           alert('Enemy appeared!');
+          input.up = false;
+          input.down = false;
+          input.left = false;
+          input.right = false;
+          input.enter = false;
+          input.space = false;
+          input.push = "default";
+          return;
         }
         this.moved = false;
       }
@@ -54,7 +66,7 @@ class Hero {
         let x = this.x / squareSize; // x-coordinate of hero
         let y = this.y / squareSize; // y-coordinate of hero
         if (y > 0) {
-          if (passableSquare.includes(map[--y][x])) { // if hero can pass through
+          if (passableTile.includes(map.mapData[--y][x])) { // if hero can pass through
             this.move = squareSize;
             input.push = 'up';
             this.direction = "up";
@@ -64,7 +76,7 @@ class Hero {
         let x = this.x / squareSize;
         let y = this.y / squareSize;
         if (y < squareNumberY - 1) {
-          if (passableSquare.includes(map[++y][x])) { 
+          if (passableTile.includes(map.mapData[++y][x])) { 
             this.move = squareSize;
             input.push = 'down';
             this.direction = "down";
@@ -74,7 +86,7 @@ class Hero {
         let x = this.x / squareSize;
         let y = this.y / squareSize;
         if (x > 0) {
-          if (passableSquare.includes(map[y][--x])) {
+          if (passableTile.includes(map.mapData[y][--x])) {
             this.move = squareSize;
             input.push = 'left';
             this.direction = "left";
@@ -84,7 +96,7 @@ class Hero {
         let x = this.x / squareSize;
         let y = this.y / squareSize;
         if (x < squareNumberX - 1) {
-          if (passableSquare.includes(map[y][++x])) {
+          if (passableTile.includes(map.mapData[y][++x])) {
             this.move = squareSize;
             input.push = 'right';
             this.direction = "right";
