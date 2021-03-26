@@ -2,8 +2,8 @@ import Sprite from './sprite.js';
 import { map, passableTile, stateList } from './main.js';
 import { squareSize, centerX, centerY, squareNumberX, squareNumberY } from "./game.js";
 
-const battleRate = 1; // for test
-// const battleRate = 0.06;
+// const battleRate = 1; // for test
+const battleRate = 0.06;
 
 class Hero {
   constructor () {
@@ -25,7 +25,7 @@ class Hero {
     this.level = 1;
     this.hp = 64;
     this.mp = 4;
-    this.attack = 9;
+    this.attack = 20;
     this.defence = 9;
     this.evadeRate = 0.1;
   }

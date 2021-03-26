@@ -45,7 +45,7 @@ class Game {
       this.objs[i].render(this.ctx, this.frame);
     }
     this.frame++; // increment frame after every rendering
-
+    // this.objs = [];
     // requestAnimationFrame(this._main.bind(this)); Add this later
   }
 }

@@ -2,9 +2,10 @@ import Label from "./label.js";
 import { centerX, centerY } from "./game.js";
 import Monster from "./monster.js";
 
-class Battle {
+export default class Battle {
   constructor(hero) {
     this.state = "ready";
+    this.battleState = "herosTurn";
     this.slime = new Monster();
     this.strHeroName = new Label("Hero", 0);
     this.strEnemyAppeared = new Label("Enemy appeared!", 2);
@@ -14,8 +15,7 @@ class Battle {
     this.strHowToAttack = new Label("A: Attack", 0);
     this.strHowToRecover = new Label("Z: Recover", 0);
     this.battleBegin = false;
-    this.heroTurnEnd = false;
-    this.enemiesTurnEnd = false;
+    this.monsterDied = false;
   }
   renderHeroStatus() {
     const jsonStatusOfHero = localStorage.getItem('statusOfHero');
@@ -58,32 +58,65 @@ class Battle {
       if (!this.battleBegin) this.battleBegin = true; 
     }
     // main battle system
-    if (this.state = "battle" && this.battleBegin) {
-      if (!this.heroTurnEnd) {
-        if (input.a) {
-          window.game.addObj(this.strHeroAttack, 230, 350); // Hero's attack!
-          this.damageHeroToMonster = this.calcDamage(this.heroStatus.atk, this.slime.defense);
-          this.strDamageHeroToMonster = new Label(`Damaged ${this.damageHeroToMonster}!`, 2);
-          this.slime.hp -= this.damageHeroToMonster;
-          this.heroTurnEnd = true;
-        } else if (input.z) {
-          // recover
-        }
-      } else if (this.heroTurnEnd) {
-        this.damageMonsterToHero = this.calcDamage(this.slime.attack, this.heroStatus.def);
-        this.strDamageMonsterToHero = new Label(`Hero has been damaged ${this.damageMonsterToHero}!`, 2);
-
-        if (input.enter) {
-          this.strHeroAttack.unvisible();
-          window.game.addObj(this.strDamageHeroToMonster, 230, 350); // Damaged ~ ! 
-
-        }
+    if (this.state === "battle" && this.battleBegin) {
+      switch (this.battleState) {
+        case "herosTurn" : // Heroes turn
+        // if (!this.monsterDied) {
+          if (input.a) {
+            window.game.addObj(this.strHeroAttack, 230, 350); // Hero's attack!
+            this.damageHeroToMonster = this.calcDamage(this.heroStatus.atk, this.slime.defense);
+            this.strDamageHeroToMonster = new Label(`Damaged ${this.damageHeroToMonster}!`, 2);
+            this.slime.hp -= this.damageHeroToMonster;
+            this.battleState = "afterHerosAttack";
+          } else if (input.z) {
+            // recover
+          }
+          break;
+        case "afterHerosAttack" : 
+          if (this.slime.hp <= 0) { // check if enemy died or not
+            this.monsterDied = true;
+            if (input.enter) {
+              this.strHeroAttack.unvisible();
+              window.game.addObj(this.strDefeatEnemy, 230, 350);
+              this.state = "result";
+            }
+          } else {
+            this.battleState = "enemiesTurn";
+          }
+          break;
+        case "enemiesTurn" : // Enemies turn
+          this.damageMonsterToHero = this.calcDamage(this.slime.attack, this.heroStatus.def);
+          this.battleTexts = [];
+          if (input.enter) {
+            this.strDamageMonsterToHero = new Label(`Hero has been damaged ${this.damageMonsterToHero}!`, 2);
+            this.strHeroAttack.unvisible();
+            window.game.addObj(this.strDamageHeroToMonster, 230, 350); // Damaged ~ ! 
+          }
+        default :
+          console.log(`Error: this.battleState becomes ${this.battleState}`);
       }
     }
   }
+  // show battle result
   result() {
-    // show battle result
+    const input = window.gameInput;
+    input.inputListener();
+
+    if (input.space) {
+      this.strDefeatEnemy.unvisible();
+      const prize = Math.floor((Math.random() * 300) + 50); // calculate prize of this battle
+      this.strGotPrize = new Label(`Got ${prize}G!`, 2);  
+      window.game.addObj(this.strGotPrize, 230, 350); // Got ~ G!
+      this.state = "end";
+    }
+  }
+
+  end() {
+    window.gameInput.inputListener();
+    if (window.gameInput.enter) {
+      this.strGotPrize.unvisible();
+      this.state = "ready";
+      window.gameState = "worldMap";
+    } 
   }
 }
-
-export default Battle;

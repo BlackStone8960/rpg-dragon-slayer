@@ -10,14 +10,9 @@ export default class Monster {
     this.defense = 1;
     this.evadeRate = 0.1;
   }
-  // render (sprite, x, y) {
   render (ctx, frame) {
     ctx.drawImage(this.sprite.img, this.sprite.left, this.sprite.top, this.sprite.width, this.sprite.height, 
                   this.x, this.y, squareSize, squareSize);
   }
-
-  // render(ctx) {
-  //   ctx.
-  // }
+  // Implement function to delete image
 }
-

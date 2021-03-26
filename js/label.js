@@ -17,7 +17,6 @@ class Label {
     else {
       if (this._charcnt < this.label.length && frame % this.interval === 0) {
         this._text += this.label.charAt(this._charcnt++);
-        // this._charcnt++;
       }
       ctx.fillText(this._text, this.x, this.y);
     }

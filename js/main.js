@@ -48,9 +48,23 @@ const main = () => {
     map.renderMap();
     hero.moveHero();
   } else if (window.gameState === "battle") {
-    battle.ready();
+    switch (battle.state){
+      case "ready" :
+        battle.ready();
+        break;
+      case "battle" :
+        battle.start();
+        break;
+      case "result" :
+        battle.result();
+        break;
+      case "end" :
+        battle.end();
+        break;
+      default :
+        console.log(`Error: battle.state is ${battle.state}`);
+    }
     game.start();
-    battle.start();
   }
   // save hero's status to localStorage
   // if storage data changed, change hero object's property

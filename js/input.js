@@ -26,8 +26,15 @@ class Input {
           break;
         case "Enter" :
           this.enter = true;
+          // if (!this.enter && !this.keepPushingEnter) {
+          //   this.enter = true;
+          //   this.keepPushingEnter = true; // prevent to keep pushing enter
+          //   console.log("Enter pushed");
+          // } else {
+          //   this.enter = false;
+          // }
           break;
-        case "Space" :
+        case " " :
           this.space = true;
           break;
         case "a" :
@@ -55,8 +62,9 @@ class Input {
           break;
         case "Enter" :
           this.enter = false;
+          // this.keepPushingEnter = false;
           break;
-        case "Space" :
+        case " " :
           this.space = false;
           break;
         case "a" :
