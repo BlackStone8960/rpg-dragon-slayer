@@ -6,6 +6,8 @@ class Input {
     this.right = false;
     this.enter = false;
     this.space = false;
+    this.a = false;
+    this.z = false;
   }
   inputListener() {
     addEventListener('keydown', (event) => {
@@ -27,6 +29,12 @@ class Input {
           break;
         case "Space" :
           this.space = true;
+          break;
+        case "a" :
+          this.a = true;
+          break;
+        case "z" :
+          this.z = true;
           break;
       }
       event.preventDefault();
@@ -50,6 +58,12 @@ class Input {
           break;
         case "Space" :
           this.space = false;
+          break;
+        case "a" :
+          this.a = false;
+          break;
+        case "z" :
+          this.z = false;
           break;
       }
     })

@@ -2,7 +2,8 @@ import Sprite from './sprite.js';
 import { map, passableTile, stateList } from './main.js';
 import { squareSize, centerX, centerY, squareNumberX, squareNumberY } from "./game.js";
 
-const battleRate = 0.06;
+const battleRate = 1; // for test
+// const battleRate = 0.06;
 
 class Hero {
   constructor () {
@@ -21,10 +22,11 @@ class Hero {
     this.direction = "down";
     this.foot = true;
     this.moved = false; // whether if just after moved
-    this.hp = 32;
+    this.level = 1;
+    this.hp = 64;
     this.mp = 4;
-    this.attack = 4;
-    this.defence = 6;
+    this.attack = 9;
+    this.defence = 9;
     this.evadeRate = 0.1;
   }
   moveHero() {
@@ -47,10 +49,8 @@ class Hero {
     }
     if (this.move === 0) {
       if (this.moved) {
-        // make battle class & method
         if (Math.random() < battleRate) { // If battle begins
           window.gameState = stateList.battle; // Change state to battle mode
-          alert('Enemy appeared!');
           input.up = false;
           input.down = false;
           input.left = false;
@@ -58,7 +58,7 @@ class Hero {
           input.enter = false;
           input.space = false;
           input.push = "default";
-          return;
+          return; // Stop hero and let him battle
         }
         this.moved = false;
       }
@@ -122,6 +122,21 @@ class Hero {
       if (this.move === squareSize / 2) this.foot = !this.foot;
       if (!this.moved) this.moved = true;
     }
+  }
+
+  saveStatus() {
+    let status = {
+      x: this.x,
+      y: this.y,
+      level: this.level,
+      hp: this.hp,
+      mp: this.mp,
+      atk: this.attack,
+      def: this.defence,
+      evd: this.evadeRate
+    };
+    status = JSON.stringify(status);
+    localStorage.setItem('statusOfHero', status);
   }
 }
 

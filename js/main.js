@@ -1,10 +1,11 @@
-import { Game, squareSize, canvasWidth, canvasHeight } from "./game.js";
+import { Game, squareSize, canvasWidth, canvasHeight, centerX, centerY } from "./game.js";
 import Hero from "./hero.js";
 import Sprite from "./sprite.js";
 import { Map, mapData } from "./map.js";
 import Input from "./input.js";
 import Battle from "./battle.js";
-import Label from "./label.js";
+// import Label from "./label.js";
+// import Monster from "./monster.js";
 
 window.game = new Game(canvasWidth, canvasHeight);
 const game = window.game;
@@ -34,7 +35,6 @@ let passableTile = [0]; // passable area
 let map = new Map(mapData.tower1, passableTile, floor1, wall1);  
 
 // Label
-const label = new Label("Enemy appeared!");
 
 // Battle
 const battle = new Battle();
@@ -48,9 +48,13 @@ const main = () => {
     map.renderMap();
     hero.moveHero();
   } else if (window.gameState === "battle") {
-    game.addText(label, 200, 200);
+    battle.ready();
     game.start();
+    battle.start();
   }
+  // save hero's status to localStorage
+  // if storage data changed, change hero object's property
+  hero.saveStatus();
   requestAnimationFrame(main);
 };
 

@@ -15,6 +15,7 @@ class Game {
     canvas.height = this.height;
     this.ctx = canvas.getContext('2d');
     this.objs = []; 
+    this.frame = 0; // frame of this game
   }
 
   add(sprite, x, y) {
@@ -26,10 +27,10 @@ class Game {
                   sprite.x, sprite.y, squareSize, squareSize);
   }
 
-  addText(text, x, y) {
-    text.x = x || 0;
-    text.y = y || 0;
-    this.objs.push(text);
+  addObj(obj, x, y) {
+    obj.x = x || 0;
+    obj.y = y || 0;
+    this.objs.push(obj);
   }
 
   start() {
@@ -41,8 +42,10 @@ class Game {
     // this.ctx.fillRect(0, 0, this.width, this.height);
 
     for (let i = 0; i < this.objs.length; i++) {
-      this.objs[i].render(this.ctx);
+      this.objs[i].render(this.ctx, this.frame);
     }
+    this.frame++; // increment frame after every rendering
+
     // requestAnimationFrame(this._main.bind(this)); Add this later
   }
 }
