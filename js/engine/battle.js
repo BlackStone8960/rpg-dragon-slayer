@@ -6,23 +6,25 @@ export default class Battle {
   constructor(hero) {
     this.state = "ready";
     this.battleState = "herosTurn";
+    this.maxTextLength = 30;
+    this.textSpeed = 2;
     this.slime = new Monster();
     this.strHeroName = new Label("Hero", 0);
-    this.strEnemyAppeared = new Label("Enemy appeared!", 2);
-    this.strHeroAttack = new Label("Hero's attack!", 2);
-    this.strEnemyAttack = new Label("Enemy's attack!", 2);
-    this.strDefeatEnemy = new Label("Defeated enemy!", 2);
-    this.strHowToAttack = new Label("A: Attack", 0);
-    this.strHowToRecover = new Label("Z: Recover", 0);
+    this.strEnemyAppeared = new Label(["Enemy appeared!"], this.maxTextLength, this.textSpeed);
+    this.strHeroAttack = new Label(["Hero's attack!"], this.maxTextLength, this.textSpeed);
+    this.strEnemyAttack = new Label(["Enemy's attack!"], this.maxTextLength, this.textSpeed);
+    this.strDefeatEnemy = new Label(["Defeated enemy!"], this.maxTextLength, this.textSpeed);
+    this.strHowToAttack = new Label(["A: Attack"], this.maxTextLength);
+    this.strHowToRecover = new Label(["Z: Recover"], this.maxTextLength);
     this.battleBegin = false;
     this.monsterDied = false;
   }
   renderHeroStatus() {
     const jsonStatusOfHero = localStorage.getItem('statusOfHero');
     this.heroStatus = JSON.parse(jsonStatusOfHero);
-    this.strHeroHp = new Label(`HP ${this.heroStatus.hp}`, 0);
-    this.strHeroMp = new Label(`MP ${this.heroStatus.mp}`, 0);
-    this.strHeroLevel = new Label(`Lv: ${this.heroStatus.level}`, 0);
+    this.strHeroHp = new Label([`HP ${this.heroStatus.hp}`], this.maxTextLength);
+    this.strHeroMp = new Label([`MP ${this.heroStatus.mp}`], this.maxTextLength);
+    this.strHeroLevel = new Label([`Lv: ${this.heroStatus.level}`], this.maxTextLength);
     window.game.addObj(this.strHeroHp, 30, 60);
     window.game.addObj(this.strHeroMp, 30, 90);
     window.game.addObj(this.strHeroLevel, 30, 120);
@@ -65,7 +67,7 @@ export default class Battle {
           if (input.a) {
             window.game.addObj(this.strHeroAttack, 230, 350); // Hero's attack!
             this.damageHeroToMonster = this.calcDamage(this.heroStatus.atk, this.slime.defense);
-            this.strDamageHeroToMonster = new Label(`Damaged ${this.damageHeroToMonster}!`, 2);
+            this.strDamageHeroToMonster = new Label([`Damaged ${this.damageHeroToMonster}!`], this.maxTextLength, this.textSpeed);
             this.slime.hp -= this.damageHeroToMonster;
             this.battleState = "afterHerosAttack";
           } else if (input.z) {
@@ -88,10 +90,13 @@ export default class Battle {
           this.damageMonsterToHero = this.calcDamage(this.slime.attack, this.heroStatus.def);
           this.battleTexts = [];
           if (input.enter) {
-            this.strDamageMonsterToHero = new Label(`Hero has been damaged ${this.damageMonsterToHero}!`, 2);
+            this.strDamageMonsterToHero = new Label([`Hero has been damaged ${this.damageMonsterToHero}!`], this.maxTextLength, this.textSpeed);
             this.strHeroAttack.unvisible();
             window.game.addObj(this.strDamageHeroToMonster, 230, 350); // Damaged ~ ! 
           }
+          break;
+        case "afterEnemiesAttack" : 
+          break;
         default :
           console.log(`Error: this.battleState becomes ${this.battleState}`);
       }
@@ -103,17 +108,21 @@ export default class Battle {
     input.inputListener();
 
     if (input.space) {
+    // if (input.enter) {
       this.strDefeatEnemy.unvisible();
       const prize = Math.floor((Math.random() * 300) + 50); // calculate prize of this battle
-      this.strGotPrize = new Label(`Got ${prize}G!`, 2);  
+      this.strGotPrize = new Label([`Got ${prize}G!`], this.maxTextLength, this.textSpeed);  
       window.game.addObj(this.strGotPrize, 230, 350); // Got ~ G!
+      this.heroStatus.money += prize;
       this.state = "end";
     }
   }
 
   end() {
-    window.gameInput.inputListener();
-    if (window.gameInput.enter) {
+    const input = window.gameInput;
+    input.inputListener();
+    if (input.enter) {
+    // if (input.enter && !input.repeat) {
       this.strGotPrize.unvisible();
       this.state = "ready";
       window.gameState = "worldMap";

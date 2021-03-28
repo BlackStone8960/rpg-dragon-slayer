@@ -1,9 +1,9 @@
 import Sprite from './sprite.js';
-import { map, passableTile, stateList } from './main.js';
+import { map, passableTile, stateList } from '../main.js';
 import { squareSize, centerX, centerY, squareNumberX, squareNumberY } from "./game.js";
 
-// const battleRate = 1; // for test
-const battleRate = 0.06;
+const battleRate = 1; // for test
+// const battleRate = 0.06;
 
 class Hero {
   constructor () {
@@ -28,6 +28,7 @@ class Hero {
     this.attack = 20;
     this.defence = 9;
     this.evadeRate = 0.1;
+    this.money = 0;
   }
   moveHero() {
     const input = window.gameInput;
@@ -133,7 +134,8 @@ class Hero {
       mp: this.mp,
       atk: this.attack,
       def: this.defence,
-      evd: this.evadeRate
+      evd: this.evadeRate,
+      money: this.money
     };
     status = JSON.stringify(status);
     localStorage.setItem('statusOfHero', status);

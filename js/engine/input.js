@@ -8,6 +8,9 @@ class Input {
     this.space = false;
     this.a = false;
     this.z = false;
+    // this.timeCounter = 0;
+    // this.repeat = false;
+    // this.countLimit = 1000;
   }
   inputListener() {
     addEventListener('keydown', (event) => {
@@ -26,9 +29,11 @@ class Input {
           break;
         case "Enter" :
           this.enter = true;
+          // console.log('entered')
           // if (!this.enter && !this.keepPushingEnter) {
           //   this.enter = true;
-          //   this.keepPushingEnter = true; // prevent to keep pushing enter
+          //   this.timeCounter++;
+          //   if ( this.timeCounter > this.countLimit ) this.keepPushingEnter = true; // prevent to keep pushing enter
           //   console.log("Enter pushed");
           // } else {
           //   this.enter = false;
@@ -44,6 +49,7 @@ class Input {
           this.z = true;
           break;
       }
+      // if (event.repeat) this.repeat = true; console.log("repeated");
       event.preventDefault();
     });
     addEventListener('keyup', (event) => {
@@ -63,6 +69,7 @@ class Input {
         case "Enter" :
           this.enter = false;
           // this.keepPushingEnter = false;
+          // this.timeCounter = 0;
           break;
         case " " :
           this.space = false;
