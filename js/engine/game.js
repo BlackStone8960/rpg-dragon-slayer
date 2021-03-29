@@ -80,6 +80,9 @@ class Game {
       e.preventDefault();
       for(let key in this._keys) {
         switch(e.type) {
+          // if repeated, should break?
+          // もしくはenterが押された直後に文章を送る用のフラグを立て、どこかのオブジェクトに格納しておく。
+          // そのあと、そのフラグが立っていれば文章を送り、送った直後にフラグを折るような関数を作る？next()の中にフラグを折る処理を入れるといいかもしれない
           case 'keydown' :
             if(e.key === this._keys[key]) this.input[key] = true;
             break;

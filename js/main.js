@@ -7,6 +7,7 @@ import Battle from "./engine/battle.js";
 import Scene from "./engine/scene.js";
 import Tilemap from "./engine/tilemap.js";
 import Tile from "./engine/tile.js";
+import characterTile from "./engine/characterTile.js";
 
 const stateList = {
   worldMap: "worldMap",
@@ -81,28 +82,46 @@ addEventListener('load', () => {
   cave.y = TILE_SIZE * 2;
   tileMap.add(cave);
 
-  const hero = new Tile("img/sprite_sheet.png");
+  const hero = new characterTile("img/sprite_sheet.png");
   hero.x = centerX;
   hero.y = centerY;
   tileMap.add(hero);
   hero.isSynchronize = false;
 
+  let toggleForAnimation = 0;
+
   scene.onEnterFrame = () => {
     if (tileMap.x % TILE_SIZE === 0 && tileMap.y % TILE_SIZE === 0) {
       tileMap.vx = tileMap.vy = 0;
-      if (game.input.left) tileMap.vx = WALKING_SPEED;
-      else if (game.input.right) tileMap.vx = -1 * WALKING_SPEED;  
-      else if (game.input.up) tileMap.vy = WALKING_SPEED;
-      else if (game.input.down) tileMap.vy = -1 * WALKING_SPEED;
+      // hero.animation = 1;
+      if (game.input.left) {
+        tileMap.vx = WALKING_SPEED;
+        hero.direction = 1;
+      } 
+      else if (game.input.right) {
+        tileMap.vx = -1 * WALKING_SPEED;  
+        hero.direction = 3;
+      } 
+      else if (game.input.up) {
+        tileMap.vy = WALKING_SPEED;
+        hero.direction = 2;
+      } 
+      else if (game.input.down) {
+        tileMap.vy = -1 * WALKING_SPEED;
+        hero.direction = 0;
+      } 
 
-      // get hero's coordinate after he moving
+      // get hero's coordinate after moving
       const heroCoordinateAfterMoveX = hero.mapX - tileMap.vx / WALKING_SPEED;
       const heroCoordinateAfterMoveY = hero.mapY - tileMap.vy / WALKING_SPEED;
 
       if (tileMap.hasObstacle(heroCoordinateAfterMoveX, heroCoordinateAfterMoveY)) {
         tileMap.vx = tileMap.vy = 0;
       }
-      // console.log(`${hero.mapX} ${hero.mapY}`);
+    }
+    else if (tileMap.x % (TILE_SIZE / 2) === 0 && tileMap.y % (TILE_SIZE / 2) === 0) {
+      toggleForAnimation ^= 1; // get 0 and 1 alternatively
+      toggleForAnimation === 1 ? hero.animation = 1 : hero.animation = 0;
     }
   };
 
