@@ -58,24 +58,56 @@ addEventListener('load', () => {
     [271, 271, 271, 271, 271, 271, 271, 363, 363, 363, 363, 363, 363, 363, 363, 271, 271, 271, 271, 273, 273, 273, 273]
   ]
   
+  const TILE_SIZE = squareSize;
+
   const WALKING_SPEED = 2;
 
   const scene = new Scene();
 
   const tileMap = new Tilemap("img/tile_set.png");
   tileMap.data = map;
+  // tileMap.x = centerX;
+  // tileMap.y = centerY;
+
   scene.add(tileMap);
 
-  const hero = new Tile("img/sprite_sheet.png");
-  scene.onEnterFrame = () => {
-    if (game.input.up) hero.y -= WALKING_SPEED;
-    if (game.input.down) hero.y += WALKING_SPEED;
-    if (game.input.left) hero.x -= WALKING_SPEED;
-    if (game.input.right) hero.x += WALKING_SPEED;
-  };
-  scene.add(hero);
-  game.add(scene);
+  const city = new Tile("img/tile_set.png", 288, 160)
+  city.x = TILE_SIZE * 2;
+  city.y = TILE_SIZE * 17;
+  tileMap.add(city);
 
+  const cave = new Tile("img/tile_set.png", 288, 176)
+  cave.x = TILE_SIZE * 10;
+  cave.y = TILE_SIZE * 2;
+  tileMap.add(cave);
+
+  const hero = new Tile("img/sprite_sheet.png");
+  hero.x = centerX;
+  hero.y = centerY;
+  tileMap.add(hero);
+  hero.isSynchronize = false;
+
+  scene.onEnterFrame = () => {
+    if (tileMap.x % TILE_SIZE === 0 && tileMap.y % TILE_SIZE === 0) {
+      tileMap.vx = tileMap.vy = 0;
+      if (game.input.left) tileMap.vx = WALKING_SPEED;
+      else if (game.input.right) tileMap.vx = -1 * WALKING_SPEED;  
+      else if (game.input.up) tileMap.vy = WALKING_SPEED;
+      else if (game.input.down) tileMap.vy = -1 * WALKING_SPEED;
+
+      // get hero's coordinate after he moving
+      const heroCoordinateAfterMoveX = hero.mapX - tileMap.vx / WALKING_SPEED;
+      const heroCoordinateAfterMoveY = hero.mapY - tileMap.vy / WALKING_SPEED;
+
+      if (tileMap.hasObstacle(heroCoordinateAfterMoveX, heroCoordinateAfterMoveY)) {
+        tileMap.vx = tileMap.vy = 0;
+      }
+      // console.log(`${hero.mapX} ${hero.mapY}`);
+    }
+  };
+
+  game.add(scene);
+  game.start();
 
   // window.gameInput = new Input();
 
@@ -117,7 +149,6 @@ addEventListener('load', () => {
   // hero.saveStatus();
   // requestAnimationFrame(main);
 // };
-  game.start();
 });
 
 // addEventListener('load', main);

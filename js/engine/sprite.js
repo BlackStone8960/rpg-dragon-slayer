@@ -17,6 +17,8 @@ export default class Sprite {
        6  7  8  
       you can only set a value of frame when sprites evenly spaced
     */
+   this.vx = this.vy = 0; // moving speed
+   this.shiftX = this.shiftY = 0; // shift the position of sprite
   }
 
   update(canvas) {
@@ -25,12 +27,15 @@ export default class Sprite {
 
     // call the method which is used when moving sprite or causing events
     this.onEnterFrame();
+
+    this.x += this.vx;
+    this.y += this.vy;
   }
 
   render(canvas) {
     // if image is out of canvas, don't render it
-    if (this.x < -1 * this.width || this.x > canvas.width) return;
-    if (this.y < -1 * this.height || this.y > canvas.height) return;
+    if (this.x + this.shiftX < -1 * this.width || this.x + this.shiftX > canvas.width) return;
+    if (this.y + this.shiftY < -1 * this.height || this.y + this.shiftY > canvas.height) return;
 
     // the number of image on x, y axises
     const _frameX = this.frame % (this.img.width / this.width);
@@ -43,8 +48,8 @@ export default class Sprite {
       this.top ? this.top : this.height * _frameY,
       this.width,
       this.height,
-      this.x,
-      this.y,
+      this.x + this.shiftX,
+      this.y + this.shiftY,
       squareSize,
       squareSize
     );
