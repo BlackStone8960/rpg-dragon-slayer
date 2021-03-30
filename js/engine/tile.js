@@ -7,4 +7,12 @@ export default class Tile extends Sprite {
     this.mapX = this.mapY = 0; // coordinate on the tilemap
     this.isSynchronize = true;
   }
+
+  isOverLapped(tile) {
+    if(tile instanceof Tile) {
+      const _isOverLapped = (this.mapX === tile.mapX && this.mapY === tile.mapY) && (this.mapX !== 0 && this.mapY !== 0);
+      return _isOverLapped;
+    }
+    else console.error('The argument is not Tile');
+  }
 }

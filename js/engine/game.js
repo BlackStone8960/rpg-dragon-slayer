@@ -46,12 +46,12 @@ class Game {
   }
 
   start() {
-    this.keybind('up', 'ArrowUp');
-    this.keybind('down', 'ArrowDown');
-    this.keybind('left', 'ArrowLeft');
-    this.keybind('right', 'ArrowRight');
-    this.keybind('enter', 'Enter');
-    this.keybind('space', ' ');
+    this.keyBind('up', 'ArrowUp');
+    this.keyBind('down', 'ArrowDown');
+    this.keyBind('left', 'ArrowLeft');
+    this.keyBind('right', 'ArrowRight');
+    this.keyBind('enter', 'Enter');
+    this.keyBind('space', ' ');
 
     this.currentScene = this.currentScene || this.scenes[0];
 
@@ -68,7 +68,7 @@ class Game {
     this.currentScene.update();
 
     for (let i = 0; i < this.currentScene.objs.length; i++) {
-      this.currentScene.objs[i].update(this.canvas);
+      this.currentScene.objs[i].update(this.canvas, this.frame);
     }
     this.frame++; // increment frame after every rendering
 
@@ -96,7 +96,7 @@ class Game {
     addEventListener('keyup', _keyEvent, { passive: false });
   }
 
-  keybind(name, key) {
+  keyBind(name, key) {
     this._keys[name] = key;
     this.input[name] = false;
   }
